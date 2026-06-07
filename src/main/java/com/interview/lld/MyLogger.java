@@ -7,12 +7,13 @@ import com.interview.lld.LogFormatter.JsonLogFormatter;
 import com.interview.lld.LogFormatter.SimpleTextLogFormatter;
 import com.interview.lld.LogHandler.*;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class MyLogger {
     private static MyLogger INSTANCE;
     private final LogHandler logHandlerChain;
-    private MyLogger(){
+    private MyLogger()  {
         LogHandler debugLogHandler = new DebugLogHandler();
         LogHandler infoLogHandler = new InfoLogHandler();
         LogHandler warnLogHandler = new WarnLogHandler();
@@ -24,11 +25,11 @@ public class MyLogger {
         debugLogHandler.addObserver(new ConsoleLogAppender(new SimpleTextLogFormatter()));
         infoLogHandler.addObserver(new ConsoleLogAppender(new SimpleTextLogFormatter()));
         warnLogHandler.addObserver(new ConsoleLogAppender(new SimpleTextLogFormatter()));
-        warnLogHandler.addObserver(new FileLogAppender(new SimpleTextLogFormatter()));
+        warnLogHandler.addObserver(new FileLogAppender(new SimpleTextLogFormatter(), "out.txt"));
         errorLogHandler.addObserver(new ConsoleLogAppender(new SimpleTextLogFormatter()));
-        errorLogHandler.addObserver(new FileLogAppender(new JsonLogFormatter()));
+        errorLogHandler.addObserver(new FileLogAppender(new JsonLogFormatter(), "out.txt"));
     }
-    public static MyLogger getInstance(){
+    public static MyLogger getInstance()  {
         if (INSTANCE==null){
             synchronized (MyLogger.class){
                 if(INSTANCE==null){
